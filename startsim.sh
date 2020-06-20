@@ -16,5 +16,5 @@ DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -XX:+UseTLAB -XX:+ResizeTLAB"
 DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -Duser.timezone=UTC"
 #DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -Dlog.root=WARN"
 echo "Running $@"
-exec "$JAVA" ${DEFAULT_JAVA_OPTS} ${JAVA_OPTS} -jar target/gatling-dse-sims  "$@"
+exec "$JAVA" ${DEFAULT_JAVA_OPTS} ${JAVA_OPTS} -jar target/scala-2.12/gatling_cassandra_timeslice "$@"
 exit 1
