@@ -7,7 +7,7 @@ else
 fi
 
 DEFAULT_JAVA_OPTS="-server"
-DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -Xms2M -Xmx2G"
+DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -Xms8G -Xmx8G"
 DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -XX:+UseG1GC -XX:MaxGCPauseMillis=30 -XX:G1HeapRegionSize=16m -XX:InitiatingHeapOccupancyPercent=75 -XX:+ParallelRefProcEnabled"
 DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -XX:+PerfDisableSharedMem -XX:+AggressiveOpts -XX:+OptimizeStringConcat"
 DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -XX:+HeapDumpOnOutOfMemoryError"
