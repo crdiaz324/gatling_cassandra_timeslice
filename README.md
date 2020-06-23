@@ -1,39 +1,28 @@
- # Gatling Cassandra Stress Simulation
-The goal of the repo is to provide a tailored version of [Gatling DSE Stress](https://github.com/datastax/gatling-dse-stress/). 
+# Running the stress test with a docker container
 
-# Using the Examples
+1 - Clone this repo:  git clone https://github.com/crdiaz324/gatling_cassandra_timeslice.git
+2 - checkout the nr-docker branch:  git checkout nr-docker
+3 - Build the docker image:  docker build -t timeslice_stress .
+4 - Run the simulation:  docker run timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 
-## Building
-To build a jar run `sbt clean assemblyLauncher`.  The compiled jar will be found in `target/scala-2.12/gatling-dse-simcatalog-assembly-1.3.0-SNAPSHOT.jar` and the executable app will be at `target/gatling-dse-sims`
+## Options:
+The application.conf file in the root directory contains all of the options that the simulation will use. You can either directly modify the application.conf file with your specific setting and mount it on your container or you can change each option via environment variables.  
 
-## Running a Simulation
-There is a custom shell script to kick off the simulations.  This script simply sets up the environment and allocates heap to the JVM that will run the gatling simulation.  This will need to be modified based on the amount of memory available to the server running the simulations.  
+If you want to mount the application.conf file, you can run the container with the following options:
+docker run -v ./application.conf:/conf/application.conf timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 
-The exacutable app can be rebuilt by running `sbt clean compile` then run the app with the path or name of wanted sim name `./startsim.sh run {SimName}`.  
+The other option is to use environment variables to modify those options:
+docker run -e JAVA_OPTS="-Dcassandra.hosts=192.168.99.205" timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 
-Example: `./startsim.sh run sims.timeslice_store.cql.InsertMinuteByTimesliceBlobsSimulation`
+To verify that your configured options are set correctly, you can run:
+docker run timeslice_stress showConf
 
-## Available Sims
-To view the available sims, simply run: `./startsim.sh listSims`
+Below is an explanation of the options that you will most likely have to modify for your specific environment:
 
-
-## Configuration
-Inside the root folder of this project, you can find a file called `application.conf`.  This file will need to be modified to include things like:
-
-* Initial host ip address
-* DC Name
-* Cluster Name
-* Keyspace name
-* How long to run the simulation for (usersConstantTime)
-* How many users to load load the cluster with (usersConstantCnt)
-
-Please review this file and adjust it accordingly before running the simulations.
-
-See: [Gatling DSE Stress Wiki](https://github.com/datastax/gatling-dse-stress/wiki) for more specific docs for usage.
-
-# Requirements
-- Java 1.8+
-- SBT
-
-Running `sbt assemblyLauncher` will download all of the needed libraries including Scala to your local machine.
-
+cassandra.hosts:  This is the ip address (or addresses) of the inital contact point for establishing the connection to the cluster
+cassandra.dcName:  The name of the data center
+cassandra.auth.username:  If you have authentication enabled, enter the username used to authenticate
+cassandra.auth.password:  The password for the user
+simulations.insertMinuteByTimesliceSim.InsertMinuteByTimeSliceBlobsScenario.usersConstantCnt:  How many simultanous users to run on the cluster
+simulations.insertMinuteByTimesliceSim.InsertMinuteByTimeSliceBlobsScenario.usersConstantTime:  How long to run the simulation for.  This parameter must be a int followed by one of s (seconds), m (minutes), h (hours)
+-Dsimulations.insertMinuteByTimesliceSim.InsertMinuteByTimeSliceBlobsScenario.usersRampTime: How long to take to ramp up to usersConstantCnt.  This parameter must be a int followed by one of s (seconds), m (minutes), h (hours)
