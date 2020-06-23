@@ -1,23 +1,12 @@
 # Running the stress test with a docker container
 
-1 - Clone this repo:  
+## To run the simulation:  
 ```
-git clone https://github.com/crdiaz324/gatling_cassandra_timeslice.git
+docker run crdiaz324/timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 ```
-
-2 - checkout the nr-docker branch:  
+## To list the available simulations:
 ```
-git checkout nr-docker
-```
-
-3 - cd into gatling_cassandra_stress and Build the docker image:  
-```
-> cd gatling_cassandra_timeslice && docker build -t timeslice_stress .
-```
-
-4 - Run the simulation:  
-```
-docker run timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
+docker run crdiaz324/timeslice_stress listSims
 ```
 
 ## Options:
@@ -50,3 +39,21 @@ Below is an explanation of the options that you will most likely have to modify 
 |simulations.insertMinuteByTimesliceSim. InsertMinuteByTimeSliceBlobsScenario.usersConstantTime|  How long to run the simulation for.  This parameter must be a int followed by one of s (seconds), m (minutes), h (hours)|
 |simulations.insertMinuteByTimesliceSim. InsertMinuteByTimeSliceBlobsScenario.usersRampTime| How long to take to ramp up to usersConstantCnt.  This parameter must be a int followed by one of s (seconds), m (minutes), h (hours)|
 
+
+
+1 - Clone this repo:  
+```
+git clone https://github.com/crdiaz324/gatling_cassandra_timeslice.git
+```
+
+2 - checkout the nr-docker branch:  
+```
+git checkout nr-docker
+```
+
+3 - cd into gatling_cassandra_stress and Build the docker image:  
+```
+> cd gatling_cassandra_timeslice && docker build -t timeslice_stress .
+```
+
+4 - 
