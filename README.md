@@ -27,14 +27,14 @@ docker run timeslice_stress showConf
 ```
 
 Below is an explanation of the options that you will most likely have to modify for your specific environment:
-
+<div class="foo">
 |Option| Description|
 |---|---|
 |cassandra.hosts|  This is the ip address (or addresses) of the inital contact point for establishing the connection to the cluster|
 |cassandra.dcName|  The name of the data center|
 |cassandra.auth.username|  If you have authentication enabled, enter the username used to authenticate|
 |cassandra.auth.password|  The password for the user|
-|simulations.insertMinuteByTimesliceSim.
-InsertMinuteByTimeSliceBlobsScenario.usersConstantCnt|  How many simultanous users to run on the cluster|
+|simulations.insertMinuteByTimesliceSim.InsertMinuteByTimeSliceBlobsScenario.usersConstantCnt|  How many simultanous users to run on the cluster|
 |simulations.insertMinuteByTimesliceSim.InsertMinuteByTimeSliceBlobsScenario.usersConstantTime|  How long to run the simulation for.  This parameter must be a int followed by one of s (seconds), m (minutes), h (hours)|
 |simulations.insertMinuteByTimesliceSim.InsertMinuteByTimeSliceBlobsScenario.usersRampTime| How long to take to ramp up to usersConstantCnt.  This parameter must be a int followed by one of s (seconds), m (minutes), h (hours)|
+ </div>
