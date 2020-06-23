@@ -1,4 +1,4 @@
-# Running the stress test with a docker container
+# Running the stress test within a docker container
 
 ## To run the simulation:  
 ```
