@@ -4,7 +4,7 @@
 
 2 - checkout the nr-docker branch:  git checkout nr-docker
 
-3 - Build the docker image:  docker build -t timeslice_stress .
+3 - cd into gatling_cassandra_stress and Build the docker image:  docker build -t timeslice_stress .
 
 4 - Run the simulation:  docker run timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 
