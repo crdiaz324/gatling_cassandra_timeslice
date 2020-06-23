@@ -1,12 +1,24 @@
 # Running the stress test with a docker container
 
-1 - Clone this repo:  git clone https://github.com/crdiaz324/gatling_cassandra_timeslice.git
+1 - Clone this repo:  
+```
+git clone https://github.com/crdiaz324/gatling_cassandra_timeslice.git
+```
 
-2 - checkout the nr-docker branch:  git checkout nr-docker
+2 - checkout the nr-docker branch:  
+```
+git checkout nr-docker
+```
 
-3 - cd into gatling_cassandra_stress and Build the docker image:  docker build -t timeslice_stress .
+3 - cd into gatling_cassandra_stress and Build the docker image:  
+```
+> cd gatling_cassandra_timeslice && docker build -t timeslice_stress .
+```
 
-4 - Run the simulation:  docker run timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
+4 - Run the simulation:  
+```
+docker run timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
+```
 
 ## Options:
 The application.conf file in the root directory contains all of the options that the simulation will use. You can either directly modify the application.conf file with your specific setting and mount it on your container or you can change each option via environment variables.  
