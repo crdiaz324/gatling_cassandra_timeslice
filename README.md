@@ -47,6 +47,7 @@ Below is an explanation of the options that you will most likely have to modify 
 |simulations.insertMinuteByTimesliceSim. InsertMinuteByTimeSliceBlobsScenario.usersRampTime| How long to take to ramp up to usersConstantCnt.  This parameter must be a int followed by one of s (seconds), m (minutes), h (hours)|
 
 
+## To rebuild the docker container
 
 1 - Clone this repo:  
 ```
