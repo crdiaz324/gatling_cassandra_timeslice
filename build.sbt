@@ -1,14 +1,4 @@
-import scala.sys.process._
-
-name := "gatling-dse-simcatalog"
-organization := "com.datastax.gatling.simcatalog"
-
-releaseUseGlobalVersion := false
-scalaVersion := "2.12.7"
-
 scalacOptions ++= Seq("-target:jvm-1.8", "-Ybreak-cycles")
-
-//mainClass in compile := Some("com.datastax.gatling.stress.Starter")
 
 resolvers ++= Seq(
   Resolver.mavenLocal,
@@ -19,7 +9,7 @@ resolvers ++= Seq(
 
 libraryDependencies ++= Seq(
   // Formerly in lib directory
-  "com.datastax.gatling.stress" %% "gatling-dse-stress" % "1.3.1",
+  "com.datastax.gatling.stress" %% "gatling-dse-stress" % "1.3.3",
 
   // From build.gradle
   "com.mashape.unirest" % "unirest-java" % "1.4.9",
@@ -69,31 +59,69 @@ assemblyMergeStrategy in assembly := {
 mainClass in assembly := Some("com.datastax.gatling.stress.Starter")
 
 //
-// Releases should reuse credentials from other build systems
+// Releases should reuse credentials from other build systems.
 //
 // For Jenkins triggered releases, find them in the file denoted by the environment variable MAVEN_USER_SETTINGS_FILE
-// If it is missing, find them in ~/.m2/settings.xml
+// If it is missing, find them in ~/.m2/settings.xml.
 //
-val settingsXml = sys.env.getOrElse("MAVEN_USER_SETTINGS_FILE", System.getProperty("user.home") + "/.m2/settings.xml")
-val mavenSettings = scala.xml.XML.loadFile(settingsXml)
-val artifactory = mavenSettings \ "servers" \ "server" filter { node => (node \ "id").text == "artifactory" }
+// If there is no ~/.m2/settings.xml, do not add anything to the sbt configuration.
+//
+val lookupM2Settings = {
+  val settingsXml = sys.env.getOrElse("MAVEN_USER_SETTINGS_FILE", System.getProperty("user.home") + "/.m2/settings.xml")
+  if (new File(settingsXml).exists()) {
+    val mavenSettings = scala.xml.XML.loadFile(settingsXml)
+    val artifactory = mavenSettings \ "servers" \ "server" filter { node => (node \ "id").text == "artifactory" }
+    if (artifactory.nonEmpty) {
+      Seq(credentials += Credentials(
+        "Artifactory Realm",
+        "datastax.jfrog.io",
+        (artifactory \ "username").text,
+        (artifactory \ "password").text))
+    } else {
+      Seq.empty
+    }
+  } else {
+    Seq.empty
+  }
+}
+
 publishTo := {
   if (isSnapshot.value) {
-    Some("Artifactory Realm" at "http://datastax.jfrog.io/datastax/datastax-public-snapshots-local;" +
-      "build.timestamp=" + new java.util.Date().getTime)
+    Some("Artifactory Realm" at "http://datastax.jfrog.io/datastax/datastax-public-snapshots-local;build.timestamp=" + new java.util.Date().getTime)
   } else {
     Some("Artifactory Realm" at "http://datastax.jfrog.io/datastax/datastax-public-releases-local")
   }
 }
-credentials += Credentials(
-  "Artifactory Realm",
-  "datastax.jfrog.io",
-  (artifactory \ "username").text,
-  (artifactory \ "password").text)
 
-lazy val assemblyLauncher = taskKey[Int]("Echo task")
+lazy val root = (project in file("."))
+  .settings(lookupM2Settings)
+  .settings(
+    scalaVersion := "2.12.5",
+    organization := "com.datastax.gatling.simcatalog",
+    name := "gatling-dse-simcatalog")
+
+val shellScript = """#!/usr/bin/env sh
+if [ -n "${JAVA_HOME}" ]; then
+  JAVA="${JAVA_HOME}"/bin/java
+else
+  JAVA=java
+fi
+DEFAULT_JAVA_OPTS="-server"
+DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -Xms2G -Xmx2G"
+DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -XX:+UseG1GC -XX:MaxGCPauseMillis=30 -XX:G1HeapRegionSize=16m -XX:InitiatingHeapOccupancyPercent=75 -XX:+ParallelRefProcEnabled"
+DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -XX:+PerfDisableSharedMem -XX:+AggressiveOpts -XX:+OptimizeStringConcat"
+DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -XX:+HeapDumpOnOutOfMemoryError"
+DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv6Addresses=false"
+DEFAULT_JAVA_OPTS="${DEFAULT_JAVA_OPTS} -XX:+UseTLAB -XX:+ResizeTLAB"
+exec "$JAVA" $DEFAULT_JAVA_OPTS $JAVA_OPTS -jar "$0" "$@"
+exit 1"""
+
+import sbtassembly.AssemblyPlugin.defaultShellScript
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(prependShellScript = Some(shellScript.split("\n").toSeq))
+
+assemblyJarName in assembly := s"gatling_cassandra_timeslice"
+
+lazy val assemblyLauncher = taskKey[Unit]("A deprecated packaging task.")
 assemblyLauncher := {
-  assembly.value
-  "./src/make/launch-builder.sh" !
+  println("ERROR assemblyLauncher is no longer supported, please run the 'assembly' task instead")
 }
-
