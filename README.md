@@ -8,6 +8,10 @@ docker run crdiaz324/timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 ```
 docker run crdiaz324/timeslice_stress listSims
 ```
+## To view your configured options:
+```
+docker run timeslice_stress showConf
+```
 
 ## Options:
 The application.conf file in the root directory contains all of the options that the simulation will use. You can either directly modify the application.conf file with your specific setting and mount it on your container or you can change each option via environment variables.  
@@ -56,4 +60,3 @@ git checkout nr-docker
 > cd gatling_cassandra_timeslice && docker build -t timeslice_stress .
 ```
 
-4 - 
