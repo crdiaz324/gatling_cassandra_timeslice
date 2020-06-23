@@ -11,6 +11,10 @@ build
 results/
 _ignore/
 logs/
-target/
+target/streams/
+target/test-reports/
+target/scala-2.12/resolution-cache/
+target/.history
+project/
 data/
 out/
