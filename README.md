@@ -1,8 +1,11 @@
 # Running the stress test with a docker container
 
 1 - Clone this repo:  git clone https://github.com/crdiaz324/gatling_cassandra_timeslice.git
+
 2 - checkout the nr-docker branch:  git checkout nr-docker
+
 3 - Build the docker image:  docker build -t timeslice_stress .
+
 4 - Run the simulation:  docker run timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 
 ## Options:
