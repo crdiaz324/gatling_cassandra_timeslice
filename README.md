@@ -17,9 +17,9 @@ docker run crdiaz324/timeslice_stress showConf
 The application.conf file in the root directory contains all of the options that the simulation will use. You can either directly modify the application.conf file with your specific setting and mount it on your container or you can change each option via environment variables.  
 
 ## Mounting the application.conf
-If you want to mount the application.conf file, you can run the container with the following options:
+If you want to mount the application.conf file, first create a directory called conf on the host machine.  Next, place the application.conf file inside that directroy.  Then run the container with the following options:
 ```
-docker run -v ./application.conf:/conf/application.conf crdiaz324/timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
+docker run -v `pwd`/conf:/conf crdiaz324/timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 ```
 
 ## Passing in opitons via environment
