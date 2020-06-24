@@ -10,7 +10,7 @@ docker run crdiaz324/timeslice_stress listSims
 ```
 ## To view your configured options:
 ```
-docker run timeslice_stress showConf
+docker run crdiaz324/timeslice_stress showConf
 ```
 
 
@@ -19,18 +19,18 @@ The application.conf file in the root directory contains all of the options that
 ## Mounting the application.conf
 If you want to mount the application.conf file, you can run the container with the following options:
 ```
-docker run -v ./application.conf:/conf/application.conf timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
+docker run -v ./application.conf:/conf/application.conf crdiaz324/timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 ```
 
 ## Passing in opitons via environment
 The other option is to use environment variables to modify those options:
 ```
-docker run -e JAVA_OPTS="-Dcassandra.hosts=192.168.99.205" timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
+docker run -e JAVA_OPTS="-Dcassandra.hosts=192.168.99.205" crdiaz324/timeslice_stress run InsertMinuteByTimesliceBlobsSimulation
 ```
 
 To verify that your configured options are set correctly, you can run:
 ```
-docker run timeslice_stress showConf
+docker run crdiaz324/timeslice_stress showConf
 ```
 
 ## Options
